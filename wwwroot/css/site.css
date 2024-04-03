@@ -1,22 +1,88 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 60px;
+}
+
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.text-left {
+    padding: 20px;
+    text-align: center;
+}
+
+
+    .text-left button {
+        background-color: #076CED;
+        color: #fff;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        padding: 15px 32px;
+        border-radius: 5px;
+        opacity: 0.8;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .text-left button:hover {
+            opacity: 1
+        }
+
+/* Screen sizing for small devices such as large phones (640px and up) */
+@media only screen and (min-width: 40em) {
+    .text-left h1 {
+        font-size: 20px;
+    }
+}
+
+
+/* Screen sizing for medium devices such as tablets (768px and up) */
+@media only screen and (min-width: 48em) {
+    .text-left {
+        padding: 55px;
+    }
+
+        .text-left h1 {
+            font-size: 25px;
+        }
+}
+
+/* Screen sizing for large devices such as laptops (1024px and up) */
+@media only screen and (min-width: 64em) {
+}
+
+/* Screen sizing for largest devices such as desktops (1280px and up) */
+@media only screen and (min-width: 80em) {
+    .text-left {
+        padding: 40px;
+    }
+
+        .text-left h1 {
+            font-size: 45px;
+        }
+}
 }
