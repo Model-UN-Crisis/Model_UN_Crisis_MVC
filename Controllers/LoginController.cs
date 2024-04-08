@@ -8,5 +8,9 @@ namespace Model_UN_Crisis.Controllers
         {
             return View();
         }
+        public IActionResult CreateAccount()
+        {
+            return View();
+        }
     }
 }

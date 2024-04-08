@@ -1,4 +1,6 @@
-﻿@{
+﻿
+@{
+    ViewData["Title"] = "CreateAccount";
     Layout = "";
 }
 
@@ -7,21 +9,29 @@
     <div class="shape"></div>
 </div>
 <form>
-    <h3>Sign In</h3>
-    <p>Welcome Back, Please Login <br>to Your Account.</br></p>
+    <h3>Sign Up</h3>
+    <p>Welcome! Please Make an Account <br>and the Conference can Begin.</br></p>
 
-    <label for="username">Username</label>
-    <input type="text" placeholder="Email or Phone" id="username">
+    <label for="username">First Name</label>
+    <input type="text" placeholder="Emily" id="username">
+
+    <label for="password">Last Name</label>
+    <input type="password" placeholder="Smith" id="password">
+
+    <label for="password">Email</label>
+    <input type="password" placeholder="emilysmith@example.com" id="password">
 
     <label for="password">Password</label>
-    <input type="password" placeholder="Password" id="password">
+    <input type="password" placeholder="•••••••••••••••" id="password">
 
-    <button>Log In</button>
-    <div class="create">
-        <a asp-controller="Login" asp-action="CreateAccount" >Create Account</a>
-    </div>
+    <label for="password">Password</label>
+    <input type="password" placeholder="•••••••••••••••" id="password">
+
+    <label for="password">Account ID</label>
+    <input type="password" placeholder="ESMITH-7890" id="password">
+
+    <button>Create Account</button>
 </form>
-
 
 
 <style>
@@ -55,17 +65,17 @@
     .shape:first-child {
         background: linear-gradient( #1845ad, #23a2f6 );
         left: -100px;
-        top: -100px;
+        top: -320px;
     }
 
     .shape:last-child {
         background: linear-gradient( to right, #ff512f, #f09819 );
-        right: -100px;
-        bottom: -110px;
+        right: -130px;
+        bottom: -320px;
     }
-    
+
     form {
-        height: 520px;
+        height: 920px;
         width: 400px;
         background-color: rgba(255,255,255,0.13);
         position: absolute;
@@ -93,10 +103,10 @@
             line-height: 42px;
             text-align: center;
         }
-    
-    form p {
-        text-align: center;
-    }
+
+        form p {
+            text-align: center;
+        }
 
     label {
         display: block;
@@ -133,13 +143,12 @@
         cursor: pointer;
     }
 
-    .create {
+    .social {
         margin-top: 30px;
         display: flex;
-        text-align: center;
     }
 
-        .create div {
+        .social div {
             background: red;
             width: 150px;
             border-radius: 3px;
@@ -149,16 +158,15 @@
             text-align: center;
         }
 
-            .create div:hover {
+            .social div:hover {
                 background-color: rgba(255,255,255,0.47);
             }
 
-        .create .fb {
+        .social .fb {
             margin-left: 25px;
         }
 
-        .create i {
+        .social i {
             margin-right: 4px;
         }
-
 </style>
