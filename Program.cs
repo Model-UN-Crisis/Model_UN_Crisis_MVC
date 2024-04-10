@@ -1,7 +1,14 @@
+using Microsoft.EntityFrameworkCore;
+using Model_UN_Crisis.DAL;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddDbContext<ModelUNDbContext>(options =>
+options.UseSqlServer(builder.Configuration.GetConnectionString("ModelUNContext"))
+);
 
 var app = builder.Build();
 

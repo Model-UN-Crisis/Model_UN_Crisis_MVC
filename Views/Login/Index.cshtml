@@ -1,4 +1,6 @@
-﻿@{
+﻿@model STG_Users
+
+@{
     Layout = "";
 }
 
@@ -11,10 +13,12 @@
     <p>Welcome Back, Please Login <br>to Your Account.</br></p>
 
     <label for="username">Username</label>
-    <input type="text" placeholder="Username" id="username">
+    @*This is what is needed to push the front end textbox code to the backend <input asp-for...>*@
+    <input asp-for="Cusername" class="form-control" />
 
     <label for="password">Password</label>
-    <input type="password" placeholder="•••••••••••••••" id="password">
+    @*This is what is needed to push the front end textbox code to the backend <input asp-for...>*@
+    <input asp-for="Cpassword" class="form-control" />
 
     <button>Log In</button>
     <div class="create">
