@@ -13,7 +13,7 @@ namespace Model_UN_Crisis.Controllers
         {
             this.modelUNDbContext = _modelUNDbContext;
         }
-        
+
         public IActionResult Index(STG_Users model)
         {
             if (IsValidUser(model))
@@ -39,6 +39,10 @@ namespace Model_UN_Crisis.Controllers
                 }
             }
             return isValid;
+        }
+        public IActionResult CreateAccount(STG_Users model)
+        {
+            return View(model);
         }
     }
 }
