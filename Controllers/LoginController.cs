@@ -14,6 +14,7 @@ namespace Model_UN_Crisis.Controllers
             this.modelUNDbContext = _modelUNDbContext;
         }
 
+        [HttpGet]
         public IActionResult Index(STG_Users model)
         {
             if (IsValidUser(model))
@@ -40,8 +41,22 @@ namespace Model_UN_Crisis.Controllers
             }
             return isValid;
         }
+
+        [HttpGet]
+        public IActionResult CreateAccount()
+        {
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult CreateAccount(STG_Users model)
         {
+            if (ModelState.IsValid)
+            {
+                modelUNDbContext.STG_Users.Add(model);
+                modelUNDbContext.SaveChanges();
+                return RedirectToAction("Index", "Login");
+            }
             return View(model);
         }
     }

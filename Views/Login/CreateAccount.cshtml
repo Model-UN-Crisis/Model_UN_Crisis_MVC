@@ -9,29 +9,36 @@
     <div class="shape"></div>
     <div class="shape"></div>
 </div>
-<form>
+<form asp-action="CreateAccount" asp-controller="Login" method="post">
     <h3>Sign Up</h3>
     <p>Welcome! Please Make an Account <br>and the Conference can Begin.</br></p>
 
-    <label for="FirstName">First Name</label>
-    <input type="text" placeholder="Emily" id="username">
+        <div>
+            <label asp-for="Cusername">Username</label>
+            <input asp-for="Cusername" class="form-control" />
+            <span asp-validation-for="Cusername" class="text-danger"></span>
+        </div>
 
-    <label for="LastName">Last Name</label>
-    <input type="text" placeholder="Smith" id="password">
+        <div>
+            <label asp-for="Cemail">Email</label>
+            <input asp-for="Cemail" class="form-control" />
+            <span asp-validation-for="Cemail" class="text-danger"></span>
+        </div>
 
-    <label for="Email">Email</label>
-    <input type="email" placeholder="emilysmith@example.com" id="password">
+        <div>
+            <label asp-for="Cpassword">Password</label>
+            <input asp-for="Cpassword" class="form-control" />
+            <span asp-validation-for="Cpassword" class="text-danger"></span>
+        </div>
 
-    <label for="password">Password</label>
-    <input type="password" placeholder="•••••••••••••••" id="password">
+        <div>
+            <label asp-for="CaccountType">Account Type</label>
+            <input asp-for="CaccountType" class="form-control" />
+            <span asp-validation-for="CaccountType" class="text-danger"></span>
+        </div>
 
-    <label for="password">Password</label>
-    <input type="password" placeholder="•••••••••••••••" id="password">
-
-    <label for="AccountID">Account ID</label>
-    <input type="text" placeholder="ESMITH-7890" id="password">
-
-    <button>Create Account</button>
+        <button type="submit">Create Account</button>
+    
 </form>
 
 
