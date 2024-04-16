@@ -1,38 +1,27 @@
-﻿@{
+﻿
+@{
 	Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
 }
-
 <div class="header">
+	<h1>Chat Title</h1>
 	<a asp-controller="MessageHub" asp-action="Index">
 		<button>Back</button>
 	</a>
-    <h1>Create New Chat</h1>
 </div>
 
-
-
-<div class="container" 
-    style="width: 600px;
-        height: 1000px;
-        padding: 12px 20px;
-        margin: 50px auto;
-        outline: 1px solid rgb(190, 190, 190);
-        font-size: 11pt;
-		">
+<div class="content" id="">
     <ui-scroll-container style="--thead-size: 44px;">
-        <table>
+		<table>
             <thead>
                 <tr>
-                    <th>User</th>
-                    <th>Participant Name</th>
+                    <th>Participant's</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td>content 1</td>
-                    <td>content 2</td>
-					<td><a href="#"><button>Add</button></a></td>
+                    <td><a href=""> <button>Add</button></a></td>
                 </tr>
                 </tr>
             </tbody>
@@ -40,60 +29,12 @@
     </ui-scroll-container>
 </div>
 
-<div class="container" style="width: 600px;
-        height: 1000px;
-        padding: 12px 20px;
-        margin: 50px auto;
-        outline: 1px solid rgb(190, 190, 190);
-        font-size: 11pt;
-		">
-	<ui-scroll-container style="--thead-size: 44px;">
-		<table>
-			<thead>
-				<tr>
-					<th>Participant's</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>content 1</td>
-					<td><a href=""> <button>Remove</button></a></td>
-				</tr>
-				</tr>
-			</tbody>
-		</table>
-	</ui-scroll-container>
-</div>
-
-<div class="button2">
-	<a asp-area="" asp-controller="" asp-action="">
-		<button>Create</button>
-	</a>
-</div>
-
 
 <style>
-	* {
-		box-sizing: border-box;
-	}
-
-	body {
-		background-color: #eee;
-	}
-
-	.hero {
-		background-color: #f0f0f0;
-		margin: 0;
-		padding: 0;
-		font-family: "Helvetica Now Display", helvetica, sans-serif;
-	}
-
 	.header h1 {
 		padding-left: 40px;
 		font-size: 3rem;
 		font-weight: 300;
-		padding-top: 10px;
 	}
 
 	.header button {
@@ -115,10 +56,17 @@
 		.header button:hover {
 			opacity: 1
 		}
+	.content {
+		width: 600px;
+		height: 1000px;
+		padding: 12px 20px;
+		margin: 50px auto;
+		outline: 1px solid rgb(190, 190, 190);
+		font-size: 11pt;
+		float:right;
+	}
 
-	
-
-
+		
 	table {
 		width: 100%;
 		border-collapse: separate;
@@ -155,19 +103,10 @@
 		td:nth-of-type(1) {
 			border-left: 0;
 		}
-		
-	.button2 button{
-		background-color: #008CBA; 
-		border: none;
-		color: white;
-		padding: 15px 32px;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
+
+	#container2 {
+		float: right;
 	}
-	
-	
 </style>
 
 <script>
@@ -306,4 +245,3 @@
 
 	customElements.define(UIScrollContainer.is, UIScrollContainer);
 </script>
-

@@ -12,5 +12,9 @@ namespace Model_UN_Crisis.Controllers
         {
             return View();
         }
-    }
+		public IActionResult Chat()
+		{
+			return View();
+		}
+	}
 }
