@@ -8,7 +8,7 @@
     <div class="shape"></div>
     <div class="shape"></div>
 </div>
-<form>
+<form method = "post">
     <h3>Sign In</h3>
     <p>Welcome Back, Please Login <br>to Your Account.</br></p>
 
@@ -19,6 +19,13 @@
     <label for="password">Password</label>
     @*This is what is needed to push the front end textbox code to the backend <input asp-for...>*@
     <input asp-for="Cpassword" class="form-control" />
+
+    @if ((bool)ViewData["IncorrectLogin"])
+    {
+        <div id="IncorrectLogin">
+            <p style="color: red;">Incorrect Email or Password</p>
+        </div>
+    }
 
     <button>Log In</button>
     <div class="create">

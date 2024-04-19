@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Model_UN_Crisis.DAL;
 using Model_UN_Crisis.Models;
 
@@ -15,31 +16,52 @@ namespace Model_UN_Crisis.Controllers
         }
 
         [HttpGet]
+        public IActionResult Index()
+        {
+            ViewData["IncorrectLogin"] = false;
+            return View();
+        }
+
+        [HttpPost]
         public IActionResult Index(STG_Users model)
         {
-            if (IsValidUser(model))
+            try 
             {
-                return RedirectToAction("Index", "Home");
-            }
-            else
-            {
-                ModelState.AddModelError("", "Invalid username or password.");
+                if (CorrectUser(model))
+                {
+                    return RedirectToAction("Index", "MessageHub");
+                }
+                else
+                {
+                    ViewData["IncorrectLogin"] = true;
+                    return View(model);
+                }
+            } 
+            catch (Exception ex)
+            { 
                 return View(model);
             }
         }
 
-        private bool IsValidUser(STG_Users model)
+        private bool CorrectUser(STG_Users model)
         {
-            bool isValid = false;
-            var users = modelUNDbContext.STG_Users.ToList();
-            foreach (var user in users)
+            try 
             {
-                if (user.Cusername == model.Cusername && user.Cpassword == model.Cpassword)
+                bool correct = false;
+                var users = modelUNDbContext.STG_Users.ToList();
+                foreach (var user in users)
                 {
-                    isValid = true;
+                    if (user.Cusername == model.Cusername && user.Cpassword == model.Cpassword)
+                    {
+                        correct = true;
+                    }
                 }
+                return correct;
+            } 
+            catch (Exception ex) 
+            { 
+                return false;
             }
-            return isValid;
         }
 
         [HttpGet]
@@ -51,13 +73,21 @@ namespace Model_UN_Crisis.Controllers
         [HttpPost]
         public IActionResult CreateAccount(STG_Users model)
         {
-            if (ModelState.IsValid)
+            try
             {
-                modelUNDbContext.STG_Users.Add(model);
-                modelUNDbContext.SaveChanges();
-                return RedirectToAction("Index", "Login");
+                if (ModelState.IsValid)
+                {
+                    modelUNDbContext.STG_Users.Add(model);
+                    modelUNDbContext.SaveChanges();
+                    return RedirectToAction("Index", "Login");
+                    
+                }
+                return View(model);
+            } 
+            catch (Exception ex) 
+            {
+                return View(model);
             }
-            return View(model);
         }
     }
 }
