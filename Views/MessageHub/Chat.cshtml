@@ -1,247 +1,170 @@
-﻿
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_Messages>
+
 @{
 	Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+	var username = Context.Session.GetString("username");
+	var userRole = Context.Session.GetString("userRole");
+	var userId = Context.Session.GetString("userId");
+	int userIdInt = Int32.Parse(userId);
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>My Conversations</title>
+    <meta http-equiv="refresh" content="4">
+</head>
+
 <div class="header">
-	<h1>Chat Title</h1>
+	<h1>My Conversations</h1>
 	<a asp-controller="MessageHub" asp-action="Index">
 		<button>Back</button>
 	</a>
 </div>
 
-<div class="content" id="">
-    <ui-scroll-container style="--thead-size: 44px;">
-		<table>
-            <thead>
-                <tr>
-                    <th>Participant's</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>content 1</td>
-                    <td><a href=""> <button>Add</button></a></td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-    </ui-scroll-container>
+<div class="content">
+    <div class="columns">
+        <div class="card">
+            <h3>All My Ongoing Chats</h3>
+            @{
+                List<string> alreadyPresentNames = new List<string>();
+            }
+            @foreach (var message in Model)
+            {
+                if (userIdInt == message.Iauthor || userIdInt == message.Igroup_Id)
+                {
+                    string name = null;
+                    if (userIdInt == message.Iauthor)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == message.Igroup_Id)
+                            {
+                                name = user.Cusername;
+                                break;
+                            }
+                        }
+                    }
+                    if (userIdInt == message.Igroup_Id)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == message.Iauthor)
+                            {
+                                name = user.Cusername;
+                                break;
+                            }
+                        }
+                    }
+                    if (!alreadyPresentNames.Contains(name))
+                    {
+                        <form id="@("formFor " + name)" method="post" asp-controller="MessageHub" asp-action="Chat">
+                            <input type="hidden" name="userName" value="@name" />
+                            <button type="button" class="continue-button" onclick="submitForm('@name')">Continue your chat with: @name</button>
+                        </form>
+                        alreadyPresentNames.Add(name);
+                    }
+                }
+            }
+        </div>
+    </div>
 </div>
+
+<script>
+    function submitForm(name) {
+        var form = document.getElementById("formFor " + name);
+        form.submit();
+    }
+</script>
+
 
 
 <style>
-	.header h1 {
-		padding-left: 40px;
-		font-size: 3rem;
-		font-weight: 300;
-	}
+    * {
+        box-sizing: border-box;
+    }
 
-	.header button {
-		margin-left: 40px;
-		background-color: #076CED;
-		color: #fdfdfd;
-		border: none;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
-		padding: 15px 32px;
-		border-radius: 5px;
-		opacity: 0.8;
-		transition: 0.3s;
-		cursor: pointer;
-	}
+    body {
+        background-color: #eee;
+    }
 
-		.header button:hover {
-			opacity: 1
-		}
-	.content {
-		width: 600px;
-		height: 1000px;
-		padding: 12px 20px;
-		margin: 50px auto;
-		outline: 1px solid rgb(190, 190, 190);
-		font-size: 11pt;
-		float:right;
-	}
+    .hero {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Now Display", helvetica, sans-serif;
+    }
 
-		
-	table {
-		width: 100%;
-		border-collapse: separate;
-		font-size: 12pt;
-		border-spacing: 0;
-	}
+    .header h1 {
+        padding-left: 40px;
+        font-size: 3rem;
+        font-weight: 300;
+    }
 
-	th {
-		position: sticky;
-		top: 0;
-		background-color: lightgray;
-		padding: 8px 0;
-		background-color: lightgray;
-	}
+    .header button {
+        margin-left: 40px;
+        background-color: #076CED;
+        color: #fdfdfd;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        padding: 15px 32px;
+        border-radius: 5px;
+        opacity: 0.8;
+        transition: 0.3s;
+        cursor: pointer;
+    }
 
-	td {
-		text-align: center;
-		color: #666;
-		padding: 7px 0;
-	}
+        .header button:hover {
+            opacity: 1
+        }
 
-		td button {
-			background-color: #04AA6D;
-			border: none;
-			color: white;
-			padding: 10px 27px;
-			text-align: center;
-			text-decoration: none;
-			display: inline-block;
-			font-size: 16px;
-		}
+    .hero p {
+        font-size: 14px;
+    }
 
-		th:nth-of-type(1),
-		td:nth-of-type(1) {
-			border-left: 0;
-		}
+    .content .columns h3 {
+        margin-top: 0;
+    }
 
-	#container2 {
-		float: right;
-	}
+    .content {
+        background-color: #f0f0f0;
+        padding: 2rem;
+        max-width: 1850px;
+        margin: 0 auto;
+    }
+
+    .card {
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fdfdfd;
+        min-width: 1300px;
+        max-width: 1300px;
+    }
+
+        .card p {
+            word-wrap: break-word;
+        }
+
+    .columns {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+        .columns > * {
+            flex-basis: calc(calc(600px - 100%) * 42069);
+            flex-grow: 1;
+        }
+
+
+    .continue-button {
+        display: block;
+        width: 1260px; 
+        height: 40px; 
+        margin-bottom: 10px; 
+    }
 </style>
-
-<script>
-	class UIScrollContainer extends HTMLElement {
-		constructor() {
-			super();
-
-			const shadow = this.attachShadow({ mode: 'open' });
-
-			const style = document.createElement('style');
-			style.textContent = `
-				:host {
-					--thead-size: 0;
-					--scrollbar-size: 6px;
-					--scrollbar-color: hsl(200, 25%, 75%, 1.0);
-
-					display: block;
-					width: 100%;
-					height: 100%;
-				}
-
-				#container {
-					position: relative;
-					width: 100%;
-					height: 100%;
-				}
-
-				#scroll {
-					width: calc(100% + var(--scrollbar-size));
-					height: 100%;
-					overflow-x: hidden;
-					overflow-y: scroll;
-					scroll-behavior: auto;
-				}
-				#scroll::-webkit-scrollbar {
-					width: var(--scrollbar-size);
-					box-sizing: content-box;
-				}
-				#scroll::-webkit-scrollbar-track {
-					background-color: transparent;
-				}
-				#scroll::-webkit-scrollbar-thumb {
-					background-color: var(--scrollbar-color);
-					border-radius: 10px;
-				}
-				#scroll::-webkit-scrollbar-button:start {
-					height: var(--thead-size);
-				}
-
-				#shadow_wrap {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					pointer-events: none;
-				}
-
-				#shadow_top,
-				#shadow_btm {
-					position: absolute;
-					left: 0;
-					width: 100%;
-					height: var(--shadow-size);
-				}
-
-				#shadow_top {
-					top: var(--thead-size);
-					background: linear-gradient(to bottom, var(--shadow-color), hsl(0, 0%, 0%, 0));
-				}
-
-				#shadow_btm {
-					bottom: 0;
-					background: linear-gradient(to top, var(--shadow-color), hsl(0, 0%, 0%, 0));
-				}
-
-				.transition {
-					transition: opacity 0.3s;
-				}
-
-				.hide {
-					opacity: 0;
-				}
-			`;
-
-			const slot = document.createElement('slot');
-
-			this.scroll = document.createElement('div');
-			this.scroll.id = 'scroll';
-			this.scroll.append(slot);
-			this.scroll.addEventListener('scroll', this.onScrolling.bind(this));
-
-			this.shadowTop = document.createElement('div');
-			this.shadowTop.id = 'shadow_top';
-
-			this.shadowBtm = document.createElement('div');
-			this.shadowBtm.id = 'shadow_btm';
-
-			const shadowWrap = document.createElement('div');
-			shadowWrap.id = 'shadow_wrap';
-			shadowWrap.append(this.shadowTop, this.shadowBtm);
-
-			const container = document.createElement('div');
-			container.id = 'container';
-			container.append(this.scroll, shadowWrap);
-
-			shadow.append(style, container);
-		}
-
-		connectedCallback() {
-			setTimeout(() => {
-				this.onScrolling();
-
-				this.shadowTop.classList.add('transition');
-				this.shadowBtm.classList.add('transition');
-			})
-		}
-
-		onScrolling(e) {
-			this.shadowTop.classList.toggle('hide', this.scroll.scrollTop == 0);
-			this.shadowBtm.classList.toggle('hide', this.scroll.scrollTop == this.scroll.scrollHeight - this.scroll.offsetHeight);
-		}
-
-		static get observedAttributes() {
-			return [];
-		}
-
-		attributeChangedCallback(attr, oldValue, newValue) {
-
-		}
-
-		static get is() {
-			return 'ui-scroll-container';
-		}
-	}
-
-	customElements.define(UIScrollContainer.is, UIScrollContainer);
-</script>

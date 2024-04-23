@@ -1,309 +1,179 @@
-﻿@{
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_Messages>
+
+@{
 	Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+	var username = Context.Session.GetString("username");
+	var userRole = Context.Session.GetString("userRole");
+	var userId = Context.Session.GetString("userId");
+	int userIdInt = Int32.Parse(userId);
 }
 
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Create New Conversation</title>
+    <meta http-equiv="refresh" content="4">
+</head>
+
 <div class="header">
+    <h1>Create New Conversation</h1>
 	<a asp-controller="MessageHub" asp-action="Index">
 		<button>Back</button>
 	</a>
-    <h1>Create New Chat</h1>
 </div>
 
-
-
-<div class="container" 
-    style="width: 600px;
-        height: 1000px;
-        padding: 12px 20px;
-        margin: 50px auto;
-        outline: 1px solid rgb(190, 190, 190);
-        font-size: 11pt;
-		">
-    <ui-scroll-container style="--thead-size: 44px;">
-        <table>
-            <thead>
-                <tr>
-                    <th>User</th>
-                    <th>Participant Name</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>content 1</td>
-                    <td>content 2</td>
-					<td><a href="#"><button>Add</button></a></td>
-                </tr>
-                </tr>
-            </tbody>
-        </table>
-    </ui-scroll-container>
+<div class="hero">
+</div>
+<div class="content">
+    <div class="columns">
+        <div class="card">
+            <h3>Start New Conversation</h3>
+            @{
+                List<string> alreadyPresentNames = new List<string>();
+            }
+            @foreach (var message in Model)
+            {
+                if (!alreadyPresentNames.Contains(username))
+                {
+                    alreadyPresentNames.Add(username);
+                }
+                if (userIdInt == message.Iauthor || userIdInt == message.Igroup_Id)
+                {
+                    string name = null;
+                    if (userIdInt == message.Iauthor)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == message.Igroup_Id)
+                            {
+                                name = user.Cusername;
+                                alreadyPresentNames.Add(name);
+                                break;
+                            }
+                        }
+                    }
+                    if (userIdInt == message.Igroup_Id)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == message.Iauthor)
+                            {
+                                name = user.Cusername;
+                                alreadyPresentNames.Add(name);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            @foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+            {
+                if (!alreadyPresentNames.Contains(user.Cusername))
+                {
+                    <form id="@("formFor " + user.Cusername)" method="post" asp-controller="MessageHub" asp-action="NewChat">
+                        <input type="hidden" name="userName" value="@user.Cusername" />
+                        <button type="button" class="new-button" onclick="submitForm('@user.Cusername')">Start a chat with: @user.Cusername</button>
+                    </form>
+                }
+            }
+        </div>
+    </div>
 </div>
 
-<div class="container" style="width: 600px;
-        height: 1000px;
-        padding: 12px 20px;
-        margin: 50px auto;
-        outline: 1px solid rgb(190, 190, 190);
-        font-size: 11pt;
-		">
-	<ui-scroll-container style="--thead-size: 44px;">
-		<table>
-			<thead>
-				<tr>
-					<th>Participant's</th>
-					<th></th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>content 1</td>
-					<td><a href=""> <button>Remove</button></a></td>
-				</tr>
-				</tr>
-			</tbody>
-		</table>
-	</ui-scroll-container>
-</div>
-
-<div class="button2">
-	<a asp-area="" asp-controller="" asp-action="">
-		<button>Create</button>
-	</a>
-</div>
+<script>
+    function submitForm(name) {
+        var form = document.getElementById("formFor " + name);
+        form.submit();
+        alert("Chat with " + name + " created successfully!");
+    }
+</script>
 
 
 <style>
-	* {
-		box-sizing: border-box;
-	}
+    * {
+        box-sizing: border-box;
+    }
 
-	body {
-		background-color: #eee;
-	}
+    body {
+        background-color: #eee;
+    }
 
-	.hero {
-		background-color: #f0f0f0;
-		margin: 0;
-		padding: 0;
-		font-family: "Helvetica Now Display", helvetica, sans-serif;
-	}
+    .hero {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Now Display", helvetica, sans-serif;
+    }
 
-	.header h1 {
-		padding-left: 40px;
-		font-size: 3rem;
-		font-weight: 300;
-		padding-top: 10px;
-	}
+    .header h1 {
+        padding-left: 40px;
+        font-size: 3rem;
+        font-weight: 300;
+    }
 
-	.header button {
-		margin-left: 40px;
-		background-color: #076CED;
-		color: #fdfdfd;
-		border: none;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
-		padding: 15px 32px;
-		border-radius: 5px;
-		opacity: 0.8;
-		transition: 0.3s;
-		cursor: pointer;
-	}
+    .header button {
+        margin-left: 40px;
+        background-color: #076CED;
+        color: #fdfdfd;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        padding: 15px 32px;
+        border-radius: 5px;
+        opacity: 0.8;
+        transition: 0.3s;
+        cursor: pointer;
+    }
 
-		.header button:hover {
-			opacity: 1
-		}
+        .header button:hover {
+            opacity: 1
+        }
 
-	
+    .hero p {
+        font-size: 14px;
+    }
 
+    .content .columns h3 {
+        margin-top: 0;
+    }
 
-	table {
-		width: 100%;
-		border-collapse: separate;
-		font-size: 12pt;
-		border-spacing: 0;
-	}
+    .content {
+        background-color: #f0f0f0;
+        padding: 2rem;
+        max-width: 1850px;
+        margin: 0 auto;
+    }
 
-	th {
-		position: sticky;
-		top: 0;
-		background-color: lightgray;
-		padding: 8px 0;
-		background-color: lightgray;
-	}
+    .card {
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fdfdfd;
+        min-width: 1300px;
+        max-width: 1300px;
+    }
 
-	td {
-		text-align: center;
-		color: #666;
-		padding: 7px 0;
-	}
+        .card p {
+            word-wrap: break-word;
+        }
 
-		td button {
-			background-color: #04AA6D;
-			border: none;
-			color: white;
-			padding: 10px 27px;
-			text-align: center;
-			text-decoration: none;
-			display: inline-block;
-			font-size: 16px;
-		}
+    .columns {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
 
-		th:nth-of-type(1),
-		td:nth-of-type(1) {
-			border-left: 0;
-		}
-		
-	.button2 button{
-		background-color: #008CBA; 
-		border: none;
-		color: white;
-		padding: 15px 32px;
-		text-align: center;
-		text-decoration: none;
-		display: inline-block;
-		font-size: 16px;
-	}
-	
-	
+        .columns > * {
+            flex-basis: calc(calc(600px - 100%) * 42069);
+            flex-grow: 1;
+        }
+
+    .new-button {
+        display: block;
+        width: 1260px;
+        height: 40px;
+        margin-bottom: 10px;
+    }
 </style>
-
-<script>
-	class UIScrollContainer extends HTMLElement {
-		constructor() {
-			super();
-
-			const shadow = this.attachShadow({ mode: 'open' });
-
-			const style = document.createElement('style');
-			style.textContent = `
-				:host {
-					--thead-size: 0;
-					--scrollbar-size: 6px;
-					--scrollbar-color: hsl(200, 25%, 75%, 1.0);
-
-					display: block;
-					width: 100%;
-					height: 100%;
-				}
-
-				#container {
-					position: relative;
-					width: 100%;
-					height: 100%;
-				}
-
-				#scroll {
-					width: calc(100% + var(--scrollbar-size));
-					height: 100%;
-					overflow-x: hidden;
-					overflow-y: scroll;
-					scroll-behavior: auto;
-				}
-				#scroll::-webkit-scrollbar {
-					width: var(--scrollbar-size);
-					box-sizing: content-box;
-				}
-				#scroll::-webkit-scrollbar-track {
-					background-color: transparent;
-				}
-				#scroll::-webkit-scrollbar-thumb {
-					background-color: var(--scrollbar-color);
-					border-radius: 10px;
-				}
-				#scroll::-webkit-scrollbar-button:start {
-					height: var(--thead-size);
-				}
-
-				#shadow_wrap {
-					position: absolute;
-					top: 0;
-					left: 0;
-					width: 100%;
-					height: 100%;
-					pointer-events: none;
-				}
-
-				#shadow_top,
-				#shadow_btm {
-					position: absolute;
-					left: 0;
-					width: 100%;
-					height: var(--shadow-size);
-				}
-
-				#shadow_top {
-					top: var(--thead-size);
-					background: linear-gradient(to bottom, var(--shadow-color), hsl(0, 0%, 0%, 0));
-				}
-
-				#shadow_btm {
-					bottom: 0;
-					background: linear-gradient(to top, var(--shadow-color), hsl(0, 0%, 0%, 0));
-				}
-
-				.transition {
-					transition: opacity 0.3s;
-				}
-
-				.hide {
-					opacity: 0;
-				}
-			`;
-
-			const slot = document.createElement('slot');
-
-			this.scroll = document.createElement('div');
-			this.scroll.id = 'scroll';
-			this.scroll.append(slot);
-			this.scroll.addEventListener('scroll', this.onScrolling.bind(this));
-
-			this.shadowTop = document.createElement('div');
-			this.shadowTop.id = 'shadow_top';
-
-			this.shadowBtm = document.createElement('div');
-			this.shadowBtm.id = 'shadow_btm';
-
-			const shadowWrap = document.createElement('div');
-			shadowWrap.id = 'shadow_wrap';
-			shadowWrap.append(this.shadowTop, this.shadowBtm);
-
-			const container = document.createElement('div');
-			container.id = 'container';
-			container.append(this.scroll, shadowWrap);
-
-			shadow.append(style, container);
-		}
-
-		connectedCallback() {
-			setTimeout(() => {
-				this.onScrolling();
-
-				this.shadowTop.classList.add('transition');
-				this.shadowBtm.classList.add('transition');
-			})
-		}
-
-		onScrolling(e) {
-			this.shadowTop.classList.toggle('hide', this.scroll.scrollTop == 0);
-			this.shadowBtm.classList.toggle('hide', this.scroll.scrollTop == this.scroll.scrollHeight - this.scroll.offsetHeight);
-		}
-
-		static get observedAttributes() {
-			return [];
-		}
-
-		attributeChangedCallback(attr, oldValue, newValue) {
-
-		}
-
-		static get is() {
-			return 'ui-scroll-container';
-		}
-	}
-
-	customElements.define(UIScrollContainer.is, UIScrollContainer);
-</script>
-

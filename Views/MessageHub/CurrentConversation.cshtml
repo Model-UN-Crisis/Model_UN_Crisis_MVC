@@ -1,0 +1,183 @@
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_Messages>
+
+@{
+    Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+    var username = Context.Session.GetString("username");
+    var userRole = Context.Session.GetString("userRole");
+    var userId = Context.Session.GetString("userId");
+    int userIdInt = Int32.Parse(userId);
+    var chatParticipant = Context.Session.GetString("ChatParticipant");
+    int chatParticipantId = 0;
+    foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+    {
+        if (chatParticipant == user.Cusername)
+        {
+            chatParticipantId = user.Iuser_id;
+            break;
+        }
+    }
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Chat With @chatParticipant</title>
+    <meta http-equiv="refresh" content="4">
+</head>
+
+<div class="header">
+    <h1>Chat With @chatParticipant</h1>
+    <a asp-controller="MessageHub" asp-action="Chat">
+        <button>Back</button>
+    </a>
+</div>
+
+<div class="hero">
+</div>
+<div class="content">
+    <div class="columns">
+        <div class="card">
+            @foreach (var message in Model)
+            {
+                if (userIdInt == message.Iauthor && chatParticipantId == message.Igroup_Id)
+                {
+                    <div style="text-align: right">
+                        <p>@("{" + message.Ttimestamp + "} [" + username + "] : " + message.Ctext)</p>
+                    </div>
+                    <br />
+                }
+                else if (chatParticipantId == message.Iauthor && userIdInt == message.Igroup_Id)
+                {
+                    <p>@("{" + message.Ttimestamp + "} [" + chatParticipant + "] : " + message.Ctext)</p>
+                    <br />
+                }
+            }
+        </div>
+    </div>
+    <br />
+    <br />
+    <form id="@("formWith " + chatParticipantId)" method="post" asp-controller="MessageHub" asp-action="CurrentConversation">
+        <input type="hidden" name="chatparticipantid" value="@chatParticipantId" />
+        <input type="text" id="messageToParticipant" name="messageToParticipant" style="width: 1200px; height: 45px; font-size: 20px;" />
+        <button type="button" class="send-button" onclick="submitForm('@chatParticipantId')">Send</button>
+    </form>
+</div>
+</div>
+
+<script>
+    function setValue() {
+        var messageText = localStorage.getItem('messageToParticipant');
+        if (messageText) {
+            document.getElementById('messageToParticipant').value = messageText;
+        }
+
+        document.getElementById('messageToParticipant').focus();
+    }
+
+    function saveValue() {
+        var messageText = document.getElementById('messageToParticipant').value;
+        localStorage.setItem('messageToParticipant', messageText);
+    }
+
+    window.onload = setValue;
+
+    document.getElementById('messageToParticipant').addEventListener('input', saveValue);
+
+    function submitForm(chatParticipantId) {
+        var messageText = document.getElementById("messageToParticipant").value;
+        document.getElementById("messageToParticipant").value = messageText;
+        var form = document.getElementById("formFor " + chatParticipantId);
+        form.submit();
+    }
+</script>
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background-color: #eee;
+    }
+
+    .hero {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Now Display", helvetica, sans-serif;
+    }
+
+    .header h1 {
+        padding-left: 40px;
+        font-size: 3rem;
+        font-weight: 300;
+    }
+
+    .header button {
+        margin-left: 40px;
+        background-color: #076CED;
+        color: #fdfdfd;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        padding: 15px 32px;
+        border-radius: 5px;
+        opacity: 0.8;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .header button:hover {
+            opacity: 1
+        }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .content .columns h3 {
+        margin-top: 0;
+    }
+
+    .content {
+        background-color: #f0f0f0;
+        padding: 2rem;
+        max-width: 1850px;
+        margin: 0 auto;
+    }
+
+    .card {
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fdfdfd;
+        min-width: 1300px;
+        max-width: 1300px;
+        height: 600px;
+        overflow: auto;
+    }
+
+        .card p {
+            word-wrap: break-word;
+        }
+
+    .columns {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+        .columns > * {
+            flex-basis: calc(calc(600px - 100%) * 42069);
+            flex-grow: 1;
+        }
+
+    .send-button {
+        width: 100px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+</style>
