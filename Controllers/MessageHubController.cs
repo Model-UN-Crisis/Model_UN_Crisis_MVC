@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Model_UN_Crisis.DAL;
 using Model_UN_Crisis.Models;
+using System.Text.RegularExpressions;
 using System.Timers;
 
 namespace Model_UN_Crisis.Controllers
@@ -129,16 +130,27 @@ namespace Model_UN_Crisis.Controllers
         }
 
         [HttpPost]
-        public IActionResult CurrentConversation(int chatParticipantId, string messageToParticipant)
+        public IActionResult CurrentConversation(STG_Messages model, int chatParticipantId, string messageToParticipant)
         {
             try
             {
-                
-                return View();
+                var message = modelUNDbContext.STG_Messages.ToList();
+                ViewData["Users"] = modelUNDbContext.STG_Users.ToList();
+                var userId = HttpContext.Session.GetString("userId");
+                var messages = new STG_Messages
+                {
+                    Iauthor = Int32.Parse(userId),
+                    Igroup_Id = chatParticipantId,
+                    Ctext = messageToParticipant,
+                    Ttimestamp = DateTime.Now
+                };
+                modelUNDbContext.STG_Messages.Add(messages);
+                modelUNDbContext.SaveChanges();
+                return View(message);
             }
             catch (Exception ex)
             {
-                return View();
+                return View(model);
             }
         }
     }
