@@ -22,7 +22,7 @@ namespace Model_UN_Crisis.Models
         public string Cemail { get; set; }
 
         [Required(ErrorMessage = "Account type is empty")]
-        [RegularExpression("^(Directive|Admin)$", ErrorMessage = "Account type must be either 'Directive' or 'Admin'")]
+        [RegularExpression("^(Delegate|Admin)$", ErrorMessage = "Account type must be either 'Delegate' or 'Admin'")]
         public string CaccountType { get; set; }
     }
 }

@@ -87,7 +87,7 @@
     function submitForm(chatParticipantId) {
         var messageText = document.getElementById("messageToParticipant").value;
         document.getElementById("messageToParticipant").value = messageText;
-        var form = document.getElementById("formFor " + chatParticipantId);
+        var form = document.getElementById("formWith " + chatParticipantId);
         form.submit();
     }
 </script>
