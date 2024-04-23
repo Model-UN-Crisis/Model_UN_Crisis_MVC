@@ -1,6 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 
+@{
+    var username = Context.Session.GetString("username");
+    var userRole = Context.Session.GetString("userRole");
+}
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -118,16 +123,16 @@
                 <div class="admin-profile hide">
                     <img src="~/SideNav/img/face-1.jpg" alt="">
                     <div class="admin-info">
-                        <h3>John Doe</h3>
-                        <h5>Admin</h5>
+                        <h3>@username</h3>
+                        <h3>@userRole</h3>
                     </div>
                 </div>
-                <a href="#" class="log-out">
+                <a asp-controller="Home" asp-action="Index" class="log-out">
                     <i class='bx bx-log-out'></i>
                 </a>
             </div>
             <div class="tooltip">
-                <span class="show">John Doe</span>
+                <span class="show">@username</span>
                 <span>Logout</span>
             </div>
         </div>
@@ -143,6 +148,7 @@
 
     <script src="~/SideNav/sideNav.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 
 </body>
 

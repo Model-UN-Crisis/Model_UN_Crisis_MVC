@@ -1,7 +1,20 @@
-﻿
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_Messages>
+
 @{
-	Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+    Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+    var username = Context.Session.GetString("username");
+    var userRole = Context.Session.GetString("userRole");
+    var userId = Context.Session.GetString("userId");
+    int userIdInt = Int32.Parse(userId);
 }
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Message Hub</title>
+    <meta http-equiv="refresh" content="4">
+</head>
 
 <div class="header">
     <h1>Message Hub</h1>
@@ -15,16 +28,72 @@
 <div class="content">
     <div class="columns">
         <div class="card">
-            <h3>My Messages</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda aperiam dignissimos, cum amet reprehenderit sit modi ratione quos quae voluptatum!</p>
+            <h3>All My Messages</h3>
+            @foreach (var message in Model)
+            {
+                if (userIdInt == message.Iauthor || userIdInt == message.Igroup_Id)
+                {
+                    string name = null;
+                    if (userIdInt == message.Iauthor)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == userIdInt)
+                            {
+                                name = user.Cusername;
+                                break;
+                            }
+                        }
+                    }
+                    if (userIdInt == message.Igroup_Id)
+                    {
+                        foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                        {
+                            if (user.Iuser_id == message.Iauthor)
+                            {
+                                name = user.Cusername;
+                                break;
+                            }
+                        }
+                    }
+                    <p>@("{" + message.Ttimestamp + "} [" + name + "] : " + message.Ctext)</p>
+                }
+            }
+        </div>
+        <div class="card">
+            <h3>My Outgoing Messages</h3>
+            @foreach (var message in Model)
+            {
+                if (userIdInt == message.Iauthor)
+                {
+                    string name = null;
+                    foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                    {
+                        if (user.Iuser_id == userIdInt)
+                        {
+                            name = user.Cusername;
+                            break;
+                        }
+                    }
+                    <p>@("{" + message.Ttimestamp + "} [" + name + "] : " + message.Ctext)</p>
+                }
+            }
         </div>
         <div class="card">
             <h3>All Chats</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique libero adipisci unde quod consequuntur, voluptatibus impedit aspernatur facilis porro debitis, incidunt odio repellat fuga ipsam recusandae minus voluptates labore ipsa enim rem temporibus sit blanditiis architecto. Dicta culpa deleniti sapiente iusto doloribus voluptas! Obcaecati, numquam debitis? Minus explicabo quas molestias.</p>
-        </div>
-        <div class="card">
-            <h3>My Messages</h3>
-            <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Assumenda aperiam dignissimos, cum amet reprehenderit sit modi ratione quos quae voluptatum!</p>
+            @foreach (var message in Model)
+            {
+                string name = null;
+                foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
+                {
+                    if (user.Iuser_id == message.Iauthor)
+                    {
+                        name = user.Cusername;
+                        break;
+                    }
+                }
+                <p>@("{" + message.Ttimestamp + "} [" + name + "] : " + message.Ctext)</p>
+            }
         </div>
     </div>
 </div>
@@ -92,6 +161,12 @@
         border-radius: 8px;
         padding: 1rem;
         background-color: #fdfdfd;
+        min-width: 400px;
+        max-width: 400px;
+    }
+
+    .card p {
+        word-wrap: break-word;
     }
 
     .columns {

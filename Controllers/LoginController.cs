@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Model_UN_Crisis.DAL;
 using Model_UN_Crisis.Models;
+using System.Data;
 
 namespace Model_UN_Crisis.Controllers
 {
@@ -14,6 +15,10 @@ namespace Model_UN_Crisis.Controllers
         {
             this.modelUNDbContext = _modelUNDbContext;
         }
+
+        public string username { get; set; }
+        public string userRole { get; set; }
+        public int userid { get; set; }
 
         [HttpGet]
         public IActionResult Index()
@@ -29,6 +34,9 @@ namespace Model_UN_Crisis.Controllers
             {
                 if (CorrectUser(model))
                 {
+                    HttpContext.Session.SetString("username", username);
+                    HttpContext.Session.SetString("userRole", userRole);
+                    HttpContext.Session.SetString("userId", userid.ToString());
                     return RedirectToAction("Index", "MessageHub");
                 }
                 else
@@ -53,6 +61,9 @@ namespace Model_UN_Crisis.Controllers
                 {
                     if (user.Cusername == model.Cusername && user.Cpassword == model.Cpassword)
                     {
+                        username = user.Cusername;
+                        userRole = user.CaccountType;
+                        userid = user.Iuser_id;
                         correct = true;
                     }
                 }

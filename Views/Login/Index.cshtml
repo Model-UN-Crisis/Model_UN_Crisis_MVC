@@ -20,7 +20,7 @@
     @*This is what is needed to push the front end textbox code to the backend <input asp-for...>*@
     <input asp-for="Cpassword" class="form-control" />
 
-    @if ((bool)ViewData["IncorrectLogin"])
+    @if (ViewData["IncorrectLogin"] as bool? == true)
     {
         <div id="IncorrectLogin">
             <p style="color: red;">Incorrect Email or Password</p>
