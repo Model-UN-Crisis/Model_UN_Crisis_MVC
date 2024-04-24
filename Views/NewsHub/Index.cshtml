@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_News>
+
+@{
+    Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
+    var userRole = Context.Session.GetString("userRole");
+    var newsList = Model.ToList();
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>News Hub</title>
+    <meta http-equiv="refresh" content="6">
+</head>
+
+<div class="header">
+    <h1>News Hub</h1>
+    <a asp-controller="MessageHub" asp-action="NewChat">
+		<button>Create New News Posting</button>
+    </a>
+</div>
+
+<div class="hero">
+</div>
+<div class="content">
+    <div class="columns">
+        <div class="card">
+            <h3>The News</h3>
+            @for (int i = newsList.Count - 1; i >= 0; i--)
+            {
+                var news = newsList[i];
+                <p>@("{" + news.Ctext + "}")</p>
+            }
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+    body{
+        background-color: #eee;
+    }
+    .hero {
+        background-color: #f0f0f0;
+        margin: 0;
+        padding: 0;
+        font-family: "Helvetica Now Display", helvetica, sans-serif;
+    }
+
+    .header h1 {
+        padding-left: 40px;
+        font-size: 3rem;
+        font-weight: 300;
+    }
+
+    .header button {
+        margin-left: 40px;
+        background-color: #076CED;
+        color: #fdfdfd;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        padding: 15px 32px;
+        border-radius: 5px;
+        opacity: 0.8;
+        transition: 0.3s;
+        cursor: pointer;
+    }
+
+        .header button:hover {
+            opacity: 1
+        }
+
+    .hero p {
+        font-size: 14px;
+    }
+
+    .content .columns h3 {
+        margin-top: 0;
+    }
+
+    .content {
+        background-color: #f0f0f0;
+        padding: 2rem;
+        max-width: 1850px;
+        margin: 0 auto;
+    }
+
+    .card {
+        border-radius: 8px;
+        padding: 1rem;
+        background-color: #fdfdfd;
+        min-width: 400px;
+        max-width: 400px;
+    }
+
+    .card p {
+        word-wrap: break-word;
+    }
+
+    .columns {
+        display: flex;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+        .columns > * {
+            flex-basis: calc(calc(600px - 100%) * 42069);
+            flex-grow: 1;
+        }
+
+</style>

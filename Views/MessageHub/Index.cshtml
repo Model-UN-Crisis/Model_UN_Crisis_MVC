@@ -6,6 +6,7 @@
     var userRole = Context.Session.GetString("userRole");
     var userId = Context.Session.GetString("userId");
     int userIdInt = Int32.Parse(userId);
+    var messageList = Model.ToList();
 }
 
 <!DOCTYPE html>
@@ -32,8 +33,9 @@
     <div class="columns">
         <div class="card">
             <h3>All My Messages</h3>
-            @foreach (var message in Model)
+            @for (int i = messageList.Count - 1; i >= 0; i--)
             {
+                var message = messageList[i];
                 if (userIdInt == message.Iauthor || userIdInt == message.Igroup_Id)
                 {
                     string name = null;
@@ -65,8 +67,9 @@
         </div>
         <div class="card">
             <h3>My Outgoing Messages</h3>
-            @foreach (var message in Model)
+            @for (int i = messageList.Count - 1; i >= 0; i--)
             {
+                var message = messageList[i];
                 if (userIdInt == message.Iauthor)
                 {
                     string name = null;
@@ -84,8 +87,9 @@
         </div>
         <div class="card">
             <h3>All Chats</h3>
-            @foreach (var message in Model)
+            @for (int i = messageList.Count - 1; i >= 0; i--)
             {
+                var message = messageList[i];
                 string name = null;
                 foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
                 {
