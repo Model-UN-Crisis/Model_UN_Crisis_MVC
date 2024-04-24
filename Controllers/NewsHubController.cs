@@ -28,5 +28,19 @@ namespace Model_UN_Crisis.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public IActionResult IndexDelegate(STG_News model)
+        {
+            try
+            {
+                var news = modelUNDbContext.STG_News.ToList();
+                return View(news);
+            }
+            catch (Exception ex)
+            {
+                return View(model);
+            }
+        }
     }
 }

@@ -66,6 +66,15 @@
 </div>
 
 <script>
+    function setValue() {
+        var messageText = localStorage.getItem('messageToParticipant');
+        if (messageText) {
+            document.getElementById('messageToParticipant').value = messageText;
+        }
+
+        document.getElementById('messageToParticipant').focus();
+    }
+
     function saveValue() {
         var messageText = document.getElementById('messageToParticipant').value;
         localStorage.setItem('messageToParticipant', messageText);
