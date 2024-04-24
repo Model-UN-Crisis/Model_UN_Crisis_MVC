@@ -3,7 +3,7 @@
 }
 
 <div class="header">
-    <h1>Create News</h1>
+    <h1>Change Account Settings</h1>
 </div>
 
 <div class="hero">
@@ -13,30 +13,60 @@
     </div>
     <br />
     <br />
-    <form id="@("formWithNews")" method="post" asp-controller="NewsHub" asp-action="CreateNews">
+    <form id="@("formWithUpdatedUser")" method="post" asp-controller="SettingsHub" asp-action="Index">
         <input type="hidden" name="formWithNews" value="formWithNews" />
-        <input type="text" id="titleToNews" name="titleToNews" style="width: 1200px; height: 45px; font-size: 20px;" />
+        <h3>Username</h3>
+        <input type="text" id="username" name="username" style="width: 1200px; height: 45px; font-size: 20px;" />
         <br />
         <br />
         <br />
-        <textarea type="text" id="messageToNews" name="messageToNews" style="width: 1200px; height: 450px; font-size: 20px; resize: none;" ></textarea>
+        <h3>Email</h3>
+        <input type="text" id="email" name="email" style="width: 1200px; height: 45px; font-size: 20px;" />
         <br />
         <br />
         <br />
-        <button type="button" class="send-button" onclick="submitForm('formWithNews')">Post</button>
+        <h3>Password</h3>
+        <input type="text" id="password" name="password" style="width: 1200px; height: 45px; font-size: 20px;" />
+        <br />
+        <br />
+        <br />
+        <button type="button" class="send-button" onclick="submitForm('formWithUpdatedUser')">Save Changes</button>
+    </form>
+    <br />
+    <form id="deleteAccountForm" asp-action="DeleteAccount" asp-controller="SettingsHub" method="post">
+        <input type="hidden" name="confirmed" id="confirmed" value="false">
+        <button type="submit" class="send-button" onclick="confirmDelete()">Delete Account</button>
     </form>
 </div>
 </div>
 
 <script>
     function submitForm(formId) {
-        var titleText = document.getElementById("titleToNews").value;
-        var messageText = document.getElementById("messageToNews").value;
-        document.getElementById("titleToNews").value = titleText;
-        document.getElementById("messageToNews").value = messageText;
+        var username = document.getElementById("username").value;
+        var email = document.getElementById("email").value;
+        var password = document.getElementById("password").value;
+        document.getElementById("username").value = username;
+        document.getElementById("email").value = email;
+        document.getElementById("password").value = password;
         var form = document.getElementById(formId);
         form.submit();
     }
+
+    function confirmDelete() {
+        if (confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            document.getElementById("confirmed").value = "true";
+            document.getElementById("deleteAccountForm").submit();
+        } else {
+            return false;
+        }
+    }
+
+    window.onload = function () {
+        var message = "@TempData["Message"]";
+        if (message) {
+            alert(message);
+        }
+    };
 </script>
 
 <style>
@@ -123,7 +153,7 @@
 
     .send-button {
         width: 100px;
-        height: 40px;
+        height: 60px;
         font-size: 20px;
     }
 

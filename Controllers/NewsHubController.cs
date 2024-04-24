@@ -42,5 +42,38 @@ namespace Model_UN_Crisis.Controllers
                 return View(model);
             }
         }
+
+        [HttpGet]
+        public IActionResult CreateNews()
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CreateNews(string titleToNews, string messageToNews)
+        {
+            try
+            {
+                var news = new STG_News 
+                {
+                    Iconference_Id = 0,
+                    Ctext = "[" + titleToNews + "]" + messageToNews,
+                };
+                modelUNDbContext.STG_News.Add(news);
+                modelUNDbContext.SaveChanges();
+                return RedirectToAction("Index", "NewsHub");
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "NewsHub");
+            }
+        }
     }
 }
