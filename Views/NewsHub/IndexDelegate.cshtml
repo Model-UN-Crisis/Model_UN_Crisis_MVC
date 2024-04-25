@@ -36,18 +36,29 @@
                     content = match.Groups[1].Value;
                     body = body.Replace(match.Value, "");
                 }
+            <div class="card-container">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">@content</h5>
                         <p class="card-text">@body</p>
                     </div>
                 </div>
+                <form id="@("formWith " + @news.Inews_Id)" method="post" asp-controller="NewsHub" asp-action="ViewNews">
+                    <input type="hidden" name="newsId" value="@news.Inews_Id" />
+                    <button type="button" class="send-button" onclick="submitForm('@news.Inews_Id')">View full</button>
+                </form>
+            </div>
             }
     </div>
 </div>
 </div>
 
-
+<script>
+    function submitForm(chatParticipantId) {
+        var form = document.getElementById("formWith " + chatParticipantId);
+        form.submit();
+    }
+</script>
 
 
 <style>
