@@ -1,5 +1,4 @@
-﻿@using System.Text.RegularExpressions;
-@model IEnumerable<Model_UN_Crisis.Models.STG_News>
+﻿@model IEnumerable<Model_UN_Crisis.Models.STG_Directives>
 
 @{
     Layout = "~/Views/Shared/_LayoutSideNav.cshtml";
@@ -11,12 +10,15 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>News Hub</title>
+    <title>Directive Hub</title>
     <meta http-equiv="refresh" content="6">
 </head>
 
 <div class="header">
-    <h1>News Hub</h1>
+    <h1>Directive Hub</h1>
+    <a asp-controller="DirectivesHub" asp-action="CreateNews">
+		<button>Create New Directive Posting</button>
+    </a>
 </div>
 
 <div class="hero">
@@ -26,40 +28,40 @@
             @for (int i = newsList.Count - 1; i >= 0; i--)
             {
                 var news = newsList[i];
-                string pattern = @"\[(.*?)\]";
-                string body = "";
-                body = news.Ctext;
-                MatchCollection matches = Regex.Matches(body, pattern);
-                string content = "";
-                foreach (Match match in matches)
+                var name = "";
+                foreach (var user in (IEnumerable<Model_UN_Crisis.Models.STG_Users>)ViewData["Users"])
                 {
-                    content = match.Groups[1].Value;
-                    body = body.Replace(match.Value, "");
+                    if (user.Iuser_id == news.Iauthor)
+                {
+                        name = user.Cusername;
+                        break;
+                    }
                 }
             <div class="card-container">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">@content</h5>
-                        <p class="card-text">@body</p>
+                        <h5 class="card-title">
+                            <span class="left-text">Author: @name</span>
+                            <span class="right-text">Status: @news.Cstatus</span>
+                        </h5>
+                        <p class="card-text">@news.Ctext</p>
                     </div>
                 </div>
-                <form id="@("formWith " + @news.Inews_Id)" method="post" asp-controller="NewsHub" asp-action="ViewNews">
-                    <input type="hidden" name="newsId" value="@news.Inews_Id" />
-                    <button type="button" class="send-button" onclick="submitForm('@news.Inews_Id')">View full</button>
+                <form id="@("formWith " + @news.Idirective_Id)" method="post" asp-controller="DirectivesHub" asp-action="ViewNews">
+                    <input type="hidden" name="newsId" value="@news.Idirective_Id" />
+                    <button type="button" class="send-button" onclick="submitForm('@news.Idirective_Id')">View full</button>
                 </form>
             </div>
             }
     </div>
 </div>
 </div>
-
 <script>
     function submitForm(chatParticipantId) {
         var form = document.getElementById("formWith " + chatParticipantId);
         form.submit();
     }
 </script>
-
 
 <style>
     * {
@@ -127,12 +129,12 @@
     }
 
         .card p {
-            overflow: hidden; 
+            overflow: hidden;
             text-overflow: ellipsis;
             display: -webkit-box;
-            -webkit-line-clamp: calc(300px / 20px); 
+            -webkit-line-clamp: calc(300px / 20px);
             -webkit-box-orient: vertical;
-            word-wrap: break-word; 
+            word-wrap: break-word;
         }
 
     .columns {
@@ -151,4 +153,20 @@
         flex-direction: column;
     }
 
+    .card-title {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .left-text {
+        align-self: flex-start;
+    }
+
+    .right-text {
+        align-self: flex-end;
+    }
+
+    .card-text {
+        font-weight: normal; /* Set font weight to normal */
+    } 
 </style>

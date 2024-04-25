@@ -70,13 +70,26 @@
 
             <ul>
                 <li class="tooltip-element" data-tooltip="2">
-                    <a href="#" data-active="2">
-                        <div class="icon">
-                            <i class='bx bx-notepad'></i>
-                            <i class='bx bxs-notepad'></i>
-                        </div>
-                        <span class="link hide">Directives Hub</span>
-                    </a>
+                    @if (userRole == "Delegate")
+                    {
+                        <a asp-controller="DirectivesHub" asp-action="Index">
+                            <div class="icon">
+                                <i class='bx bx-notepad'></i>
+                                <i class='bx bxs-notepad'></i>
+                            </div>
+                            <span class="link hide">Directives Hub</span>
+                        </a>
+                    }
+                    else if(userRole == "Admin")
+                    {
+                         <a asp-controller="DirectivesHub" asp-action="IndexDelegate">
+                            <div class="icon">
+                                <i class='bx bx-notepad'></i>
+                                <i class='bx bxs-notepad'></i>
+                            </div>
+                            <span class="link hide">Directives Hub</span>
+                        </a>                        
+                    }
                 </li>
                 <li class="tooltip-element" data-tooltip="3">
                     <a asp-controller="SettingsHub" asp-action="Index">
