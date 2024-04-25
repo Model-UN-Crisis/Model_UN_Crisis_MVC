@@ -16,6 +16,18 @@
 
 <div class="header">
     <h1>Viewing Message</h1>
+    @if (userRole == "Delegate")
+    {
+        <a asp-controller="NewsHub" asp-action="IndexDelegate">
+            <button>Back</button>
+        </a>
+    }
+    else if (userRole == "Admin")
+    {
+        <a asp-controller="NewsHub" asp-action="Index">
+            <button>Back</button>
+        </a>
+    }
 </div>
 
 <div class="hero">
