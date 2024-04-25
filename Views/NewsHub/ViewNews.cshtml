@@ -11,56 +11,43 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>News Hub</title>
-    <meta http-equiv="refresh" content="6">
+    <title>Viewing Message</title>
 </head>
 
 <div class="header">
-    <h1>News Hub</h1>
-    <a asp-controller="NewsHub" asp-action="CreateNews">
-		<button>Create New News Posting</button>
-    </a>
+    <h1>Viewing Message</h1>
 </div>
 
 <div class="hero">
 </div>
 <div class="content">
     <div class="columns">
-            @for (int i = newsList.Count - 1; i >= 0; i--)
+        <div class="card">
+            @foreach (var news in newsList)
             {
-                var news = newsList[i];
-                string pattern = @"\[(.*?)\]";
-                string body = "";
-                body = news.Ctext;
-                MatchCollection matches = Regex.Matches(body, pattern);
-                string content = "";
-                foreach (Match match in matches)
+                if ((int)ViewData["newsId"] == news.Inews_Id)
                 {
-                    content = match.Groups[1].Value;
-                    body = body.Replace(match.Value, "");
+                    string pattern = @"\[(.*?)\]";
+                    string body = "";
+                    body = news.Ctext;
+                    MatchCollection matches = Regex.Matches(body, pattern);
+                    string content = "";
+                    foreach (Match match in matches)
+                    {
+                        content = match.Groups[1].Value;
+                        body = body.Replace(match.Value, "");
+                    }
+                    <h2>@(content)</h2>
+                    <h3 style="font-weight: normal;">@(body)</h3>
                 }
-            <div class="card-container">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">@content</h5>
-                        <p class="card-text">@body</p>
-                    </div>
-                </div>
-                <form id="@("formWith " + @news.Inews_Id)" method="post" asp-controller="NewsHub" asp-action="ViewNews">
-                    <input type="hidden" name="newsId" value="@news.Inews_Id" />
-                    <button type="button" class="send-button" onclick="submitForm('@news.Inews_Id')">View full</button>
-                </form>
-            </div>
             }
+        </div>
     </div>
 </div>
 </div>
-<script>
-    function submitForm(chatParticipantId) {
-        var form = document.getElementById("formWith " + chatParticipantId);
-        form.submit();
-    }
-</script>
+
+
+
 
 <style>
     * {
@@ -121,18 +108,11 @@
         border-radius: 8px;
         padding: 1rem;
         background-color: #fdfdfd;
-        min-width: 400px;
-        max-width: 400px;
-        height: 300px;
-        overflow: hidden;
+        min-width: 1300px;
+        max-width: 1300px;
     }
 
         .card p {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: calc(300px / 20px);
-            -webkit-box-orient: vertical;
             word-wrap: break-word;
         }
 
@@ -146,10 +126,5 @@
             flex-basis: calc(calc(600px - 100%) * 42069);
             flex-grow: 1;
         }
-
-    .card-container {
-        display: flex;
-        flex-direction: column;
-    }
 
 </style>

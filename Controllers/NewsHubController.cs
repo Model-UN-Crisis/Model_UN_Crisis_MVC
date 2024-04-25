@@ -75,5 +75,35 @@ namespace Model_UN_Crisis.Controllers
                 return RedirectToAction("Index", "NewsHub");
             }
         }
+
+        [HttpGet]
+        public IActionResult ViewNews(int newsId)
+        {
+            try
+            {
+                var news = modelUNDbContext.STG_News.ToList();
+                ViewData["newsId"] = newsId;
+                return View(news);
+            }
+            catch (Exception ex)
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ViewNews(STG_News model, int newsId)
+        {
+            try
+            {
+                var news = modelUNDbContext.STG_News.ToList();
+                ViewData["newsId"] = newsId;
+                return View(news);
+            }
+            catch (Exception ex)
+            {
+                return View(model);
+            }
+        }
     }
 }
